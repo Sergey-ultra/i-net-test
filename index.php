@@ -13,16 +13,17 @@ $array = [
 
 //1
 function getUniqueRows(array $array, string $key): array {
-    $result = $keys = [];
+    $keys = [];
 
-    foreach($array as $row) {
-        if (!in_array($row[$key], $keys)) {
-            $keys[] = $row[$key];
-            $result[] = $row;
+    return array_filter(
+        $array,
+        function ($value) use (&$keys, $key) {
+            if (!in_array($value[$key], $keys)) {
+                $keys[] = $value[$key];
+                return $value;
+            }
         }
-    }
-
-    return $result;
+    );
 }
 
 //2
@@ -44,16 +45,23 @@ function getByKey(array $array, string $key, int $value): array {
 
 //4
 
-function reversePrimaryKey(array &$array): array {
-    foreach($array as &$item) {
-        foreach($item as $key => $value) {
-            if ($key === 'id') {
-                $item[$value] = $key;
-                unset($item['id']);
-            }
-        }
-    }
-    return $array;
+function reversePrimaryKey(array $array): array{
+    return array_map(
+        function ($item) {
+            return array_map(
+                function ($key, $value) use (&$item) {
+                    if ($key === 'id') {
+                        unset($item['id']);
+                        return "{$value} => {$key}";
+                    }
+                    return "{$key} => {$value}";
+                },
+                array_keys($item),
+                array_values($item)
+            );
+        },
+        $array
+    );
 }
 
 var_dump(getByKey($array, 'id', 1));
