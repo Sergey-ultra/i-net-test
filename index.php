@@ -48,17 +48,9 @@ function getByKey(array $array, string $key,  $value): array {
 function reversePrimaryKey(array $array): array{
     return array_map(
         function ($item) {
-            return array_map(
-                function ($key, $value) use (&$item) {
-                    if ($key === 'id') {
-                        unset($item['id']);
-                        return "{$value} => {$key}";
-                    }
-                    return "{$key} => {$value}";
-                },
-                array_keys($item),
-                array_values($item)
-            );
+            $item[$item['id']] = 'id';
+            unset($item['id']);
+            return $item;
         },
         $array
     );
