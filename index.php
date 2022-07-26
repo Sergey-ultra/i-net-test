@@ -13,17 +13,8 @@ $array = [
 
 //1
 function getUniqueRows(array $array, string $key): array {
-    $keys = [];
-
-    return array_filter(
-        $array,
-        function ($value) use (&$keys, $key) {
-            if (!in_array($value[$key], $keys)) {
-                $keys[] = $value[$key];
-                return $value;
-            }
-        }
-    );
+    $temp = array_unique(array_column($array, $key));
+    return array_intersect_key($array, $temp);
 }
 
 //2
