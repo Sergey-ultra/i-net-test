@@ -35,7 +35,7 @@ function sortByKey(array &$array, string $key): void {
 
 //3
 
-function getByKey(array $array, string $key, int $value): array {
+function getByKey(array $array, string $key,  $value): array {
    return array_filter($array, function($item) use($key, $value) {
        if ($item[$key] === $value) {
             return $item;
